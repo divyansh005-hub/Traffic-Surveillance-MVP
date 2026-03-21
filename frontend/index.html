@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traffic Surveillance MVP</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>IoT Traffic Surveillance</h1>
+            <div class="status">System Status: <span class="badge healthy">Online</span></div>
+        </header>
+        
+        <main>
+            <section class="metrics-grid">
+                <div class="card latest-metric">
+                    <h3>Latest Vehicle Count</h3>
+                    <div class="value" id="latest-count">--</div>
+                    <div class="subtitle" id="latest-source">Source: --</div>
+                </div>
+                <div class="card latest-metric">
+                    <h3>Congestion Level</h3>
+                    <div class="value" id="latest-congestion">--</div>
+                    <div class="subtitle" id="latest-time">Time: --</div>
+                </div>
+            </section>
+
+            <section class="charts-section">
+                <div class="card">
+                    <h3>Recent Traffic Trend</h3>
+                    <div class="chart-container">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="history-section">
+                <div class="card">
+                    <h3>Recent History</h3>
+                    <table id="history-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Source</th>
+                                <th>Count</th>
+                                <th>Congestion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            <section class="demo-upload-section">
+                <div class="card">
+                    <h3>Demo / Prototype Upload</h3>
+                    <p class="subtitle" style="color: #7f8c8d; font-size: 14px;">Upload an image or video to simulate sensor input.</p>
+                    <div class="upload-container" style="display: flex; gap: 10px; margin-top: 15px; align-items: center; flex-wrap: wrap;">
+                        <input type="file" id="demo-file" accept="image/*,video/*" style="font-size: 14px;">
+                        <input type="text" id="demo-source" placeholder="Camera Name" value="Demo_Camera" style="padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
+                        <button id="upload-btn" onclick="uploadDemoFile()" style="padding: 6px 12px; font-size: 14px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Analyze File</button>
+                    </div>
+                    <div id="upload-status" style="margin-top: 10px; font-size: 14px; font-weight: bold;"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/static/app.js"></script>
+</body>
+</html>

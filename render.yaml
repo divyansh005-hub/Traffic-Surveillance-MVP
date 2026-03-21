@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: traffic-surveillance-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.13
+      - key: YOLO_MODEL_PATH
+        value: yolov8n.pt
