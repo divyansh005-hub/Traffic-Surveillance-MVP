@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Smart Traffic Control System - Terminal Alpha-9</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "tertiary": "#ffebc6",
+                "on-tertiary-fixed": "#261a00",
+                "on-error-container": "#ffdad6",
+                "on-primary-fixed-variant": "#004f58",
+                "error": "#ffb4ab",
+                "surface-tint": "#00daf3",
+                "inverse-surface": "#dfe2eb",
+                "on-error": "#690005",
+                "primary-fixed": "#9cf0ff",
+                "on-surface": "#dfe2eb",
+                "surface-container": "#1c2026",
+                "surface-container-high": "#262a31",
+                "on-secondary-container": "#f2f3ff",
+                "on-secondary-fixed": "#001945",
+                "surface": "#10141a",
+                "on-primary-container": "#00626e",
+                "on-secondary": "#002d6e",
+                "on-primary-fixed": "#001f24",
+                "error-container": "#93000a",
+                "background": "#10141a",
+                "tertiary-fixed-dim": "#fabd00",
+                "on-surface-variant": "#bac9cc",
+                "on-primary": "#00363d",
+                "outline": "#849396",
+                "primary": "#c3f5ff",
+                "inverse-on-surface": "#2d3137",
+                "surface-variant": "#31353c",
+                "on-tertiary": "#3f2e00",
+                "on-tertiary-fixed-variant": "#5b4300",
+                "secondary-fixed-dim": "#b0c6ff",
+                "surface-container-low": "#181c22",
+                "inverse-primary": "#006875",
+                "primary-container": "#00e5ff",
+                "outline-variant": "#3b494c",
+                "tertiary-fixed": "#ffdf9e",
+                "secondary-container": "#0068ed",
+                "surface-bright": "#353940",
+                "on-tertiary-container": "#725400",
+                "surface-container-lowest": "#0a0e14",
+                "tertiary-container": "#ffc948",
+                "primary-fixed-dim": "#00daf3",
+                "on-background": "#dfe2eb",
+                "surface-dim": "#10141a",
+                "on-secondary-fixed-variant": "#00429b",
+                "secondary": "#b0c6ff",
+                "surface-container-highest": "#31353c",
+                "secondary-fixed": "#d9e2ff"
+              },
+              fontFamily: {
+                "headline": ["Space Grotesk"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(28, 32, 38, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+        }
+        .neon-glow-error {
+            box-shadow: 0 0 15px rgba(255, 180, 171, 0.3);
+        }
+        .neon-glow-tertiary {
+            box-shadow: 0 0 15px rgba(250, 189, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="bg-[#10141a] dark:bg-[#10141a] text-[#00E5FF] dark:text-[#00E5FF] font-['Space_Grotesk'] tracking-tight docked full-width top-0 z-50 bg-[#181c22] shadow-[0_4px_20px_rgba(0,229,255,0.1)] fixed w-full">
+<div class="flex justify-between items-center w-full px-6 py-4">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-[#00E5FF] uppercase tracking-widest">Smart Traffic Control System</span>
+<span class="h-4 w-[1px] bg-outline-variant opacity-30"></span>
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-mono text-sm tracking-widest">22:45:01</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-primary-container/20">
+<span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></span>
+<span class="text-xs font-bold uppercase tracking-wider">Online</span>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-[#1c2026] hover:text-[#c3f5ff] transition-colors p-2 rounded-lg">notifications</span>
+<span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-[#1c2026] hover:text-[#c3f5ff] transition-colors p-2 rounded-lg">settings</span>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="bg-[#181c22] dark:bg-[#181c22] text-[#00E5FF] dark:text-[#00E5FF] font-['Inter'] text-sm uppercase tracking-wider fixed left-0 top-0 h-full flex flex-col pt-20 w-64 shadow-[4px_0_24px_rgba(0,0,0,0.5)] z-40 bg-gradient-to-r from-[#181c22] to-[#1c2026]">
+<div class="px-6 py-4 border-b border-outline-variant/10 mb-4">
+<h2 class="font-['Space_Grotesk'] font-black text-white text-lg tracking-tighter">STCS OPS</h2>
+<p class="text-[10px] text-slate-500 font-medium">Terminal Alpha-9</p>
+</div>
+<nav class="flex-1 px-2">
+<a class="flex items-center gap-3 bg-[#262a31] text-[#00E5FF] border-r-4 border-[#00E5FF] px-4 py-3 my-1 hover:translate-x-1 duration-300 transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+<span class="material-symbols-outlined">visibility</span>
+<span>Traffic Monitoring</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+<span class="material-symbols-outlined">settings_remote</span>
+<span>Control Panel</span>
+</a>
+</nav>
+<div class="p-4 mt-auto">
+<div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/5">
+<p class="text-[10px] text-slate-400 mb-2">SYSTEM LOAD</p>
+<div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[24%]"></div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-8 pb-12 grid grid-cols-12 gap-8">
+<!-- Left & Center: Live Feeds & Simulation -->
+<div class="col-span-12 lg:col-span-8 space-y-8">
+<!-- A. LIVE TRAFFIC VIEW -->
+<section class="relative rounded-xl overflow-hidden glass-panel border border-outline-variant/10 group">
+<div class="aspect-video relative">
+<img class="w-full h-full object-cover opacity-60" data-alt="futuristic nocturnal city intersection bird's eye view with glowing neon car light trails and high-tech interface overlays" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8dz3Sn95pddjoLxrrXcPk4T6JEJE8k_uEbwx-ramGHXKbpE9R7ScCXEFAcAqCjgzYlmpaWtITQdD2TjNZrKRFzS9eaWGYS21l8IFfDiV6UVkyFWPHdMawPFwzWDi2_fnT4SsATFDqk8CV0wxIiBFrPnASd0fAvawULhSYNq2VfarfvBQqTVEwWM_E2GAAR7-RZt-A3hG6q0QQsWFvBNDd4fsf9D2Z0vrACd3xubhaujxxAlI0S93IODsGkxsdeSrlza7cwd3gghY"/>
+<!-- Neon HUD Overlays -->
+<div class="absolute inset-0 pointer-events-none">
+<!-- Scanning line animation simulation -->
+<div class="absolute top-1/4 left-1/4 w-32 h-32 border-2 border-primary-container/40 rounded-lg">
+<span class="absolute -top-6 left-0 text-[10px] text-primary-container font-mono">VEHICLE_ID: 8824</span>
+</div>
+<div class="absolute bottom-1/3 right-1/4 w-40 h-24 border-2 border-primary-container/40 rounded-lg">
+<span class="absolute -top-6 left-0 text-[10px] text-primary-container font-mono">VEHICLE_ID: 9102</span>
+</div>
+<div class="absolute top-0 left-0 w-full h-full border-[20px] border-surface-container-lowest/20 pointer-events-none"></div>
+</div>
+<!-- Overlay Labels -->
+<div class="absolute top-6 left-6 flex items-center gap-4">
+<div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-primary-container/30">
+<span class="text-primary-container font-headline font-bold tracking-widest text-sm">CAM-04 | DOWNTOWN</span>
+</div>
+<div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
+<span class="text-on-surface font-mono text-xs tracking-tighter">22:45:01:04 MS</span>
+</div>
+</div>
+<div class="absolute bottom-6 right-6">
+<div class="flex items-center gap-2 bg-error-container/40 backdrop-blur-md px-3 py-1 rounded-full border border-error/30">
+<span class="w-2 h-2 bg-error rounded-full animate-pulse"></span>
+<span class="text-[10px] font-bold text-error uppercase">Live Feed</span>
+</div>
+</div>
+</div>
+</section>
+<!-- B. INTERSECTION SIMULATION -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm">Intersection Simulation</h3>
+<span class="material-symbols-outlined text-slate-500 text-sm">filter_center_focus</span>
+</div>
+<div class="relative aspect-square bg-surface-container-lowest rounded-lg border border-outline-variant/5 flex items-center justify-center overflow-hidden">
+<!-- The 4-Way Road Structure -->
+<div class="absolute w-full h-16 bg-surface-variant/20"></div>
+<div class="absolute h-full w-16 bg-surface-variant/20"></div>
+<!-- Traffic Lights Indicators -->
+<div class="absolute top-[30%] left-1/2 -translate-x-1/2 flex flex-col gap-1">
+<div class="w-2 h-2 rounded-full bg-error neon-glow-error"></div>
+<div class="w-2 h-2 rounded-full bg-tertiary/20"></div>
+<div class="w-2 h-2 rounded-full bg-primary-container/20"></div>
+</div>
+<div class="absolute bottom-[30%] left-1/2 -translate-x-1/2 flex flex-col gap-1">
+<div class="w-2 h-2 rounded-full bg-error/20"></div>
+<div class="w-2 h-2 rounded-full bg-tertiary/20"></div>
+<div class="w-2 h-2 rounded-full bg-primary-container neon-glow-primary"></div>
+</div>
+<!-- Moving Particles (Cars) -->
+<div class="absolute top-1/2 left-4 w-4 h-2 bg-primary-container rounded-sm shadow-[0_0_8px_rgba(0,229,255,0.5)]"></div>
+<div class="absolute top-1/2 left-16 w-4 h-2 bg-primary-container rounded-sm shadow-[0_0_8px_rgba(0,229,255,0.5)]"></div>
+<div class="absolute top-[45%] right-8 w-4 h-2 bg-tertiary-fixed-dim rounded-sm"></div>
+</div>
+</div>
+<!-- Control Panel Section inside main area -->
+<div class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+<h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-6">Manual Overrides</h3>
+<div class="space-y-4">
+<button class="w-full py-4 rounded-lg bg-error-container text-on-error-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-error/30">
+<span class="material-symbols-outlined text-lg">dangerous</span>
+                            FORCE RED
+                        </button>
+<button class="w-full py-4 rounded-lg bg-primary-container text-on-primary-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-primary/30">
+<span class="material-symbols-outlined text-lg">bolt</span>
+                            FORCE GREEN
+                        </button>
+<button class="w-full py-4 rounded-lg bg-surface-container-high text-on-surface font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-surface-bright transition-all active:scale-95 border border-outline-variant/20">
+<span class="material-symbols-outlined text-lg">autorenew</span>
+                            RESET TO AUTO
+                        </button>
+</div>
+</div>
+</section>
+<!-- ANALYTICS SECTION -->
+<section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm">Traffic Flow Analytics</h3>
+<div class="flex gap-2">
+<button class="px-3 py-1 text-[10px] rounded bg-surface-container-high border border-outline-variant/10">1H</button>
+<button class="px-3 py-1 text-[10px] rounded bg-primary-container text-on-primary-container font-bold">24H</button>
+<button class="px-3 py-1 text-[10px] rounded bg-surface-container-high border border-outline-variant/10">7D</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- Line Chart Placeholder -->
+<div class="space-y-4">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Traffic Trend (Real-time)</p>
+<div class="h-32 flex items-end gap-1 px-2">
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[40%] border-t border-primary-container"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[60%] border-t border-primary-container"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[55%] border-t border-primary-container"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[85%] border-t border-primary-container relative">
+<div class="absolute -top-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary-container neon-glow-primary"></div>
+</div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[70%] border-t border-primary-container"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[45%] border-t border-primary-container"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[30%] border-t border-primary-container"></div>
+</div>
+</div>
+<!-- Bar Chart Placeholder -->
+<div class="space-y-4">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Vehicle Distribution</p>
+<div class="space-y-3">
+<div class="flex items-center gap-4">
+<span class="text-[10px] w-12 text-slate-500">Cars</span>
+<div class="flex-1 h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[75%]"></div>
+</div>
+<span class="text-[10px] font-mono">75%</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-[10px] w-12 text-slate-500">Trucks</span>
+<div class="flex-1 h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim w-[15%]"></div>
+</div>
+<span class="text-[10px] font-mono">15%</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-[10px] w-12 text-slate-500">Cycles</span>
+<div class="flex-1 h-2 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[10%]"></div>
+</div>
+<span class="text-[10px] font-mono">10%</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Side Panel: Metrics & Zones -->
+<div class="col-span-12 lg:col-span-4 space-y-8">
+<!-- Metrics Cards -->
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2 glass-panel p-6 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">Total Vehicle Count</p>
+<div class="flex items-baseline gap-2">
+<h2 class="text-4xl font-headline font-black text-primary-container tracking-tighter">1,482</h2>
+<span class="text-[10px] text-tertiary-fixed-dim font-mono">+12% vs last hour</span>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Congestion</p>
+<h3 class="text-xl font-headline font-bold text-[#4ADE80] uppercase">Low</h3>
+</div>
+<div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Avg Speed</p>
+<h3 class="text-xl font-headline font-bold text-on-surface">42 <span class="text-xs text-slate-500">km/h</span></h3>
+</div>
+<div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Predicted</p>
+<h3 class="text-xl font-headline font-bold text-on-surface">15%</h3>
+</div>
+<div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Status</p>
+<h3 class="text-xs font-headline font-bold text-primary-container uppercase tracking-widest mt-2">Optimized</h3>
+</div>
+</div>
+<!-- Multi-Zone Grid -->
+<section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+<h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-6">Zone Health</h3>
+<div class="space-y-6">
+<!-- Zone 1 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="text-xs font-bold text-white uppercase">Zone 1: Financial District</h4>
+<p class="text-[10px] text-slate-500">421 Vehicles detected</p>
+</div>
+<span class="text-[10px] font-bold text-[#4ADE80]">NORMAL</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[35%]"></div>
+</div>
+</div>
+<!-- Zone 2 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="text-xs font-bold text-white uppercase">Zone 2: Industrial North</h4>
+<p class="text-[10px] text-slate-500">892 Vehicles detected</p>
+</div>
+<span class="text-[10px] font-bold text-tertiary-fixed-dim">MODERATE</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim w-[65%]"></div>
+</div>
+</div>
+<!-- Zone 3 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="text-xs font-bold text-white uppercase">Zone 3: Central Transit</h4>
+<p class="text-[10px] text-slate-500">1,204 Vehicles detected</p>
+</div>
+<span class="text-[10px] font-bold text-error">CRITICAL</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-error w-[92%]"></div>
+</div>
+</div>
+<!-- Zone 4 -->
+<div>
+<div class="flex justify-between items-end mb-2">
+<div>
+<h4 class="text-xs font-bold text-white uppercase">Zone 4: Harbor Loop</h4>
+<p class="text-[10px] text-slate-500">145 Vehicles detected</p>
+</div>
+<span class="text-[10px] font-bold text-[#4ADE80]">NORMAL</span>
+</div>
+<div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-[15%]"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Map Summary / Location -->
+<div class="glass-panel rounded-xl overflow-hidden border border-outline-variant/10 h-48 relative">
+<div class="absolute inset-0 bg-surface-container-lowest">
+<!-- Placeholder for Map Visualization -->
+<div class="absolute inset-0 opacity-30" data-alt="abstract digital network circuit pattern with glowing lines representing city grid connections" data-location="Downtown Metropolis" style="background-image: url('https://placeholder.pics/svg/300'); background-size: cover; background-position: center;"></div>
+</div>
+<div class="absolute bottom-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-2 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] text-slate-400 font-bold uppercase">Location Focus</p>
+<p class="text-xs font-bold text-white">Grid Sector 7-A</p>
+</div>
+<button class="absolute top-4 right-4 bg-primary-container/20 p-2 rounded-lg border border-primary-container/40">
+<span class="material-symbols-outlined text-primary-container text-sm">fullscreen</span>
+</button>
+</div>
+</div>
+</main>
+<!-- FAB (Suppressed on dashboard as per rules, but included for system integrity if needed elsewhere) -->
+<!-- Not rendered here to prioritize dashboard density -->
+</body></html>

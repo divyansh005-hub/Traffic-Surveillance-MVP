@@ -20,6 +20,14 @@ class TrafficResult(Base):
     frame_id = Column(Integer)
     vehicle_count = Column(Integer)
     congestion_level = Column(String)
+    avg_speed = Column(String)  # Serialized list or single value
+    flow_rate = Column(Integer)  # Vehicles per minute
+    density = Column(Integer)
+    total_lane_changes = Column(Integer)
+    fps = Column(String)
+    latency = Column(String)
+    predicted_count = Column(Integer)
+    predicted_congestion = Column(String)
 
 Base.metadata.create_all(bind=engine)
 

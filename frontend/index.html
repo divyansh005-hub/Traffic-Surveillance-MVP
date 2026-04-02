@@ -1,74 +1,405 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traffic Surveillance MVP</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Smart Traffic Control System - Terminal Alpha-9</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "tertiary": "#ffebc6",
+                "on-tertiary-fixed": "#261a00",
+                "on-error-container": "#ffdad6",
+                "on-primary-fixed-variant": "#004f58",
+                "error": "#ffb4ab",
+                "surface-tint": "#00daf3",
+                "inverse-surface": "#dfe2eb",
+                "on-error": "#690005",
+                "primary-fixed": "#9cf0ff",
+                "on-surface": "#dfe2eb",
+                "surface-container": "#1c2026",
+                "surface-container-high": "#262a31",
+                "on-secondary-container": "#f2f3ff",
+                "on-secondary-fixed": "#001945",
+                "surface": "#10141a",
+                "on-primary-container": "#00626e",
+                "on-secondary": "#002d6e",
+                "on-primary-fixed": "#001f24",
+                "error-container": "#93000a",
+                "background": "#10141a",
+                "tertiary-fixed-dim": "#fabd00",
+                "on-surface-variant": "#bac9cc",
+                "on-primary": "#00363d",
+                "outline": "#849396",
+                "primary": "#c3f5ff",
+                "inverse-on-surface": "#2d3137",
+                "surface-variant": "#31353c",
+                "on-tertiary": "#3f2e00",
+                "on-tertiary-fixed-variant": "#5b4300",
+                "secondary-fixed-dim": "#b0c6ff",
+                "surface-container-low": "#181c22",
+                "inverse-primary": "#006875",
+                "primary-container": "#00e5ff",
+                "outline-variant": "#3b494c",
+                "tertiary-fixed": "#ffdf9e",
+                "secondary-container": "#0068ed",
+                "surface-bright": "#353940",
+                "on-tertiary-container": "#725400",
+                "surface-container-lowest": "#0a0e14",
+                "tertiary-container": "#ffc948",
+                "primary-fixed-dim": "#00daf3",
+                "on-background": "#dfe2eb",
+                "surface-dim": "#10141a",
+                "on-secondary-fixed-variant": "#00429b",
+                "secondary": "#b0c6ff",
+                "surface-container-highest": "#31353c",
+                "secondary-fixed": "#d9e2ff"
+              },
+              fontFamily: {
+                "headline": ["Space Grotesk"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+    </script>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>IoT Traffic Surveillance</h1>
-            <div class="status">System Status: <span class="badge healthy">Online</span></div>
-        </header>
-        
-        <main>
-            <section class="metrics-grid">
-                <div class="card latest-metric">
-                    <h3>Latest Vehicle Count</h3>
-                    <div class="value" id="latest-count">--</div>
-                    <div class="subtitle" id="latest-source">Source: --</div>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+    <!-- TopAppBar -->
+    <header class="bg-[#181c22] text-[#00E5FF] font-headline tracking-tight docked full-width top-0 z-50 shadow-[0_4px_20px_rgba(0,229,255,0.1)] fixed w-full">
+        <div class="flex justify-between items-center w-full px-6 py-4">
+            <div class="flex items-center gap-4">
+                <span class="text-xl font-bold uppercase tracking-widest text-[#00E5FF]">Smart Traffic Control System</span>
+                <span class="h-4 w-[1px] bg-outline-variant opacity-30"></span>
+                <div class="flex items-center gap-2 text-primary">
+                    <span class="material-symbols-outlined text-sm">schedule</span>
+                    <span class="font-mono text-sm tracking-widest" id="current-time">--:--:--</span>
                 </div>
-                <div class="card latest-metric">
-                    <h3>Congestion Level</h3>
-                    <div class="value" id="latest-congestion">--</div>
-                    <div class="subtitle" id="latest-time">Time: --</div>
+            </div>
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-primary-container/20">
+                    <span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></span>
+                    <span class="text-xs font-bold uppercase tracking-wider">Online</span>
                 </div>
-            </section>
+                <div class="flex gap-4">
+                    <span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-[#1c2026] hover:text-[#c3f5ff] transition-colors p-2 rounded-lg">notifications</span>
+                    <span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-[#1c2026] hover:text-[#c3f5ff] transition-colors p-2 rounded-lg">settings</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-            <section class="charts-section">
-                <div class="card">
-                    <h3>Recent Traffic Trend</h3>
-                    <div class="chart-container">
-                        <canvas id="trendChart"></canvas>
+    <!-- SideNavBar -->
+    <aside class="bg-[#181c22] text-[#00E5FF] font-['Inter'] text-sm uppercase tracking-wider fixed left-0 top-0 h-full flex flex-col pt-20 w-64 shadow-[4px_0_24px_rgba(0,0,0,0.5)] z-40 bg-gradient-to-r from-[#181c22] to-[#1c2026]">
+        <div class="px-6 py-4 border-b border-outline-variant/10 mb-4">
+            <h2 class="font-['Space_Grotesk'] font-black text-white text-lg tracking-tighter">STCS OPS</h2>
+            <p class="text-[10px] text-slate-500 font-medium">Terminal Alpha-9</p>
+        </div>
+        <nav class="flex-1 px-2">
+            <a id="overview-link" class="flex items-center gap-3 bg-[#262a31]/10 text-[#00E5FF] border-r-4 border-[#00E5FF] px-4 py-3 my-1 hover:translate-x-1 duration-300 transition-all active" href="#">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span>Dashboard Overview</span>
+            </a>
+            <a id="analytics-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+                <span class="material-symbols-outlined">leaderboard</span>
+                <span>Analytics Engine</span>
+            </a>
+            <a id="history-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+                <span class="material-symbols-outlined">history</span>
+                <span>Intelligence Log</span>
+            </a>
+            <a id="security-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+                <span class="material-symbols-outlined">security</span>
+                <span>System Security</span>
+            </a>
+        </nav>
+        <div class="p-4 mt-auto">
+            <div class="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/5">
+                <div class="flex justify-between items-center mb-2">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">FPS</p>
+                    <span class="text-[10px] font-mono text-primary-container" id="system-fps">--</span>
+                </div>
+                <div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+                    <div class="h-full bg-primary-container" id="fps-bar" style="width: 24%"></div>
+                </div>
+            </div>
+            <div class="mt-4 bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/5">
+                <div class="flex justify-between items-center mb-2">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Latency</p>
+                    <span class="text-[10px] font-mono text-error" id="system-latency">-- ms</span>
+                </div>
+                <div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+                    <div class="h-full bg-error" id="latency-bar" style="width: 15%"></div>
+                </div>
+            </div>
+            <div class="mt-4 bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/5">
+                <div class="flex justify-between items-center mb-2">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest">Confidence</p>
+                    <span class="text-[10px] font-mono text-primary" id="system-confidence">--%</span>
+                </div>
+                <div class="h-1.5 w-full bg-surface-variant rounded-full overflow-hidden">
+                    <div class="h-full bg-primary" id="confidence-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Canvas -->
+    <main class="ml-64 pt-24 px-8 pb-12">
+        <!-- TAB: OVERVIEW -->
+        <div id="overview-tab" class="grid grid-cols-12 gap-8 tab-content animate-in">
+            <!-- Left & Center: Live Feeds & Simulation -->
+            <div class="col-span-12 lg:col-span-8 space-y-8">
+            <!-- A. LIVE TRAFFIC VIEW -->
+            <section class="relative rounded-xl overflow-hidden glass-panel border border-outline-variant/10 group shadow-2xl">
+                <div class="aspect-video relative bg-black">
+                    <img id="liveFeed" class="w-full h-full object-contain" src="" alt="Stream initializing..."/>
+                    
+                    <!-- HUD Overlays -->
+                    <div class="absolute inset-0 pointer-events-none">
+                        <!-- Scanning box -->
+                        <div class="absolute top-1/4 left-1/4 w-32 h-32 border-2 border-primary-container/40 rounded-lg animate-pulse">
+                            <span class="absolute -top-6 left-0 text-[10px] text-primary-container font-mono bg-surface/60 px-1">VEHICLE_SCAN: ACTV</span>
+                        </div>
+                        <div class="scan-line"></div>
+                    </div>
+
+                    <!-- HUD Metadata -->
+                    <div class="absolute top-6 left-6 flex items-center gap-4">
+                        <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-primary-container/30">
+                            <span class="text-primary-container font-headline font-bold tracking-widest text-sm uppercase">CAM-01 | Main Highway</span>
+                        </div>
+                        <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
+                            <span class="text-on-surface font-mono text-xs tracking-tighter" id="hud-timestamp">--:--:--:-- MS</span>
+                        </div>
+                    </div>
+
+                    <!-- HUD Status -->
+                    <div class="absolute bottom-6 right-6 flex flex-col items-end gap-3">
+                        <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
+                            <div class="flex items-center gap-4 text-xs font-mono">
+                                <span class="text-slate-400 uppercase">Density:</span>
+                                <span class="text-primary-container font-bold" id="density-value">--%</span>
+                            </div>
+                            <div class="flex items-center gap-4 text-xs font-mono mt-1">
+                                <span class="text-slate-400 uppercase">Lanes:</span>
+                                <span class="text-tertiary-fixed-dim font-bold" id="lane-changes-value">0</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-error-container/40 backdrop-blur-md px-3 py-1 rounded-full border border-error/30">
+                            <span class="w-2 h-2 bg-error rounded-full animate-pulse"></span>
+                            <span class="text-[10px] font-bold text-error uppercase">Live Intelligence</span>
+                        </div>
                     </div>
                 </div>
             </section>
-            
-            <section class="history-section">
-                <div class="card">
-                    <h3>Recent History</h3>
-                    <table id="history-table">
-                        <thead>
+
+            <!-- B. INTERSECTION SIMULATION & CONTROLS -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Simulation Mock -->
+                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm">Intersection Simulation</h3>
+                        <span class="material-symbols-outlined text-slate-500 text-sm">filter_center_focus</span>
+                    </div>
+                    <div class="relative aspect-square bg-surface-container-lowest rounded-lg border border-outline-variant/5 flex items-center justify-center overflow-hidden">
+                        <div class="absolute w-full h-16 bg-surface-variant/20"></div>
+                        <div class="absolute h-full w-16 bg-surface-variant/20"></div>
+                        <div class="absolute top-[30%] left-1/2 -translate-x-1/2 flex flex-col gap-1">
+                            <div class="w-2 h-2 rounded-full bg-error neon-glow-error" id="sim-light-red"></div>
+                            <div class="w-2 h-2 rounded-full bg-tertiary/20"></div>
+                            <div class="w-2 h-2 rounded-full bg-primary-container/20"></div>
+                        </div>
+                        <div class="absolute top-1/2 left-4 w-4 h-2 bg-primary-container rounded-sm shadow-[0_0_8px_rgba(0,229,255,0.5)]"></div>
+                        <div class="absolute top-[45%] right-8 w-4 h-2 bg-tertiary-fixed-dim rounded-sm"></div>
+                    </div>
+                </div>
+                
+                <!-- Manual Overrides -->
+                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+                    <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-6">Manual Overrides</h3>
+                    <div class="space-y-4">
+                        <button class="w-full py-4 rounded-lg bg-error-container text-on-error-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-error/30">
+                            <span class="material-symbols-outlined text-lg">dangerous</span>
+                            FORCE RED
+                        </button>
+                        <button class="w-full py-4 rounded-lg bg-primary-container text-on-primary-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-primary/30">
+                            <span class="material-symbols-outlined text-lg">bolt</span>
+                            FORCE GREEN
+                        </button>
+                        <button class="w-full py-4 rounded-lg bg-surface-container-high text-on-surface font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-surface-bright transition-all active:scale-95 border border-outline-variant/20">
+                            <span class="material-symbols-outlined text-lg">autorenew</span>
+                            RESET TO AUTO
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- C. ANALYTICS -->
+            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm">Traffic Flow Analytics</h3>
+                    <div class="flex gap-2">
+                        <button class="px-3 py-1 text-[10px] rounded bg-primary-container text-on-primary-container font-bold shadow-lg shadow-primary-container/20">Real-time</button>
+                    </div>
+                </div>
+                <div class="h-64">
+                    <canvas id="intensityChart"></canvas>
+                </div>
+            </section>
+        </div>
+
+        <!-- Right Side Panel: Metrics & Zones -->
+        <div class="col-span-12 lg:col-span-4 space-y-8">
+            <!-- Metrics Cards -->
+            <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2 glass-panel p-6 rounded-xl border border-outline-variant/10 neon-glow-primary">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">Total Vehicle Count</p>
+                    <div class="flex items-baseline gap-2">
+                        <h2 class="text-4xl font-headline font-black text-primary-container tracking-tighter" id="total-vehicle-count">--</h2>
+                        <span class="text-[10px] text-tertiary-fixed-dim font-mono">+12% vs last hour</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Congestion</p>
+                    <h3 class="text-xl font-headline font-bold text-[#4ADE80] uppercase" id="congestion-status">--</h3>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Avg Speed</p>
+                    <h3 class="text-xl font-headline font-bold text-on-surface" id="avg-speed-value">-- <span class="text-xs text-slate-500">km/h</span></h3>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Predicted</p>
+                    <div class="flex items-center gap-2">
+                        <h3 class="text-xl font-headline font-bold text-on-surface" id="predicted-count">--</h3>
+                        <span class="text-lg font-bold text-primary-container" id="prediction-trend">→</span>
+                    </div>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Status</p>
+                    <h3 class="text-xs font-headline font-bold text-primary-container uppercase tracking-widest mt-2" id="prediction-status">OPTIMIZED</h3>
+                </div>
+            </div>
+
+            <!-- Multi-Zone Grid -->
+            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-6">Zone Health</h3>
+                <div class="space-y-6" id="zone-container">
+                    <!-- Zone 1 -->
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <div>
+                                <h4 class="text-xs font-bold text-white uppercase">Sector Alpha</h4>
+                                <p class="text-[10px] text-slate-500" id="zone-1-sub">-- Vehicles</p>
+                            </div>
+                            <span class="text-[10px] font-bold text-[#4ADE80]" id="zone-1-status">NORMAL</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+                            <div class="h-full bg-primary-container transition-all duration-500" id="zone-1-bar" style="width: 35%"></div>
+                        </div>
+                    </div>
+                    <!-- Zone 2 -->
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <div>
+                                <h4 class="text-xs font-bold text-white uppercase">Sector Beta</h4>
+                                <p class="text-[10px] text-slate-500" id="zone-2-sub">-- Vehicles</p>
+                            </div>
+                            <span class="text-[10px] font-bold text-tertiary-fixed-dim" id="zone-2-status">MODERATE</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
+                            <div class="h-full bg-tertiary-fixed-dim transition-all duration-500" id="zone-2-bar" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI Insights Panel -->
+            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">psychology</span>
+                    AI Insights Model
+                </h3>
+                <div id="ai-insights-container" class="space-y-3 max-h-[150px] overflow-y-auto custom-scrollbar pr-2">
+                    <!-- Dynamic insights will be injected here by app.js -->
+                    <div class="flex items-start gap-2 text-xs font-mono text-slate-500">
+                        <span class="text-slate-600 font-bold">></span>
+                        <span class="animate-pulse">Awaiting neural telemetry...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Event History Log -->
+            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10 h-[300px] flex flex-col">
+                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-4">Intelligence Log</h3>
+                <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
+                    <table class="w-full text-left text-[10px] text-slate-400 font-mono">
+                        <thead class="sticky top-0 bg-surface-container py-2 border-b border-outline-variant/10">
                             <tr>
-                                <th>Timestamp</th>
-                                <th>Source</th>
-                                <th>Count</th>
-                                <th>Congestion</th>
+                                <th class="pb-2">LOG_TIME</th>
+                                <th class="pb-2">CNT</th>
+                                <th class="pb-2">SPD</th>
+                                <th class="pb-2">STAT</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <!-- Populated via JS -->
+                        <tbody id="history-table-body">
+                            <!-- Rows populated by app.js -->
                         </tbody>
                     </table>
                 </div>
             </section>
-            <section class="demo-upload-section">
-                <div class="card">
-                    <h3>Demo / Prototype Upload</h3>
-                    <p class="subtitle" style="color: #7f8c8d; font-size: 14px;">Upload an image or video to simulate sensor input.</p>
-                    <div class="upload-container" style="display: flex; gap: 10px; margin-top: 15px; align-items: center; flex-wrap: wrap;">
-                        <input type="file" id="demo-file" accept="image/*,video/*" style="font-size: 14px;">
-                        <input type="text" id="demo-source" placeholder="Camera Name" value="Demo_Camera" style="padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px;">
-                        <button id="upload-btn" onclick="uploadDemoFile()" style="padding: 6px 12px; font-size: 14px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer;">Analyze File</button>
+        </div>
+
+        <!-- TAB: ANALYTICS (Full Width) -->
+        <div id="analytics-tab" class="tab-content hidden animate-in space-y-8">
+            <div class="glass-panel p-8 rounded-xl border border-outline-variant/10">
+                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-lg mb-8">Deep Analytics Core</h3>
+                <div class="h-[500px]">
+                    <!-- Chart already defined in overview but shared/moved if needed -->
+                    <p class="text-slate-500 font-mono text-sm mb-4">Neural Data Mapping active...</p>
+                    <div class="bg-surface-container-lowest/50 rounded-xl p-6 h-full">
+                        <!-- We use the same chart but can add more later -->
+                        <canvas id="deepAnalyticsChart"></canvas> 
                     </div>
-                    <div id="upload-status" style="margin-top: 10px; font-size: 14px; font-weight: bold;"></div>
                 </div>
-            </section>
-        </main>
-    </div>
-    <script src="/static/app.js"></script>
+            </div>
+        </div>
+
+        <!-- TAB: HISTORY (Full Width) -->
+        <div id="history-tab" class="tab-content hidden animate-in space-y-8">
+            <div class="glass-panel p-8 rounded-xl border border-outline-variant/10">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-lg">System Intelligence Log</h3>
+                    <button class="px-4 py-2 bg-surface-container-high border border-outline-variant/20 rounded-lg text-xs font-bold font-mono">EXPORT_DATA.JSON</button>
+                </div>
+                <div class="bg-surface-container-lowest/50 rounded-xl overflow-hidden">
+                    <table class="w-full text-left text-sm text-slate-400 font-mono">
+                        <thead class="bg-surface-container py-4 border-b border-outline-variant/10">
+                            <tr class="px-6">
+                                <th class="p-4">TIMESTAMP</th>
+                                <th class="p-4">OBJECTS</th>
+                                <th class="p-4">AVG_SPEED</th>
+                                <th class="p-4">CONGESTION</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body-full" class="divide-y divide-outline-variant/5">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="app.js"></script>
 </body>
 </html>
