@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="dark" lang="en">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
@@ -8,60 +8,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link href="style.css?v=2" rel="stylesheet">
     <script id="tailwind-config">
         tailwind.config = {
-          darkMode: "class",
           theme: {
             extend: {
               colors: {
-                "tertiary": "#ffebc6",
-                "on-tertiary-fixed": "#261a00",
-                "on-error-container": "#ffdad6",
-                "on-primary-fixed-variant": "#004f58",
-                "error": "#ffb4ab",
-                "surface-tint": "#00daf3",
-                "inverse-surface": "#dfe2eb",
-                "on-error": "#690005",
-                "primary-fixed": "#9cf0ff",
-                "on-surface": "#dfe2eb",
-                "surface-container": "#1c2026",
-                "surface-container-high": "#262a31",
-                "on-secondary-container": "#f2f3ff",
-                "on-secondary-fixed": "#001945",
-                "surface": "#10141a",
-                "on-primary-container": "#00626e",
-                "on-secondary": "#002d6e",
-                "on-primary-fixed": "#001f24",
-                "error-container": "#93000a",
-                "background": "#10141a",
-                "tertiary-fixed-dim": "#fabd00",
-                "on-surface-variant": "#bac9cc",
-                "on-primary": "#00363d",
-                "outline": "#849396",
-                "primary": "#c3f5ff",
-                "inverse-on-surface": "#2d3137",
-                "surface-variant": "#31353c",
-                "on-tertiary": "#3f2e00",
-                "on-tertiary-fixed-variant": "#5b4300",
-                "secondary-fixed-dim": "#b0c6ff",
-                "surface-container-low": "#181c22",
-                "inverse-primary": "#006875",
-                "primary-container": "#00e5ff",
-                "outline-variant": "#3b494c",
-                "tertiary-fixed": "#ffdf9e",
-                "secondary-container": "#0068ed",
-                "surface-bright": "#353940",
-                "on-tertiary-container": "#725400",
-                "surface-container-lowest": "#0a0e14",
-                "tertiary-container": "#ffc948",
-                "primary-fixed-dim": "#00daf3",
-                "on-background": "#dfe2eb",
-                "surface-dim": "#10141a",
-                "on-secondary-fixed-variant": "#00429b",
-                "secondary": "#b0c6ff",
-                "surface-container-highest": "#31353c",
-                "secondary-fixed": "#d9e2ff"
+                "background": "#f8fafc",
+                "surface": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "surface-container-low": "#f1f5f9",
+                "surface-container": "#e2e8f0",
+                "surface-container-high": "#cbd5e1",
+                "surface-container-highest": "#94a3b8",
+                "on-surface": "#0f172a",
+                "on-background": "#0f172a",
+                "primary": "#0ea5e9",
+                "primary-container": "#bae6fd",
+                "on-primary-container": "#0369a1",
+                "error": "#ef4444",
+                "error-container": "#fee2e2",
+                "on-error-container": "#b91c1c",
+                "tertiary": "#f59e0b",
+                "tertiary-fixed-dim": "#f59e0b",
+                "tertiary-container": "#fef3c7",
+                "on-tertiary-container": "#b45309",
+                "outline-variant": "#cbd5e1",
+                "outline": "#94a3b8",
+                "on-surface-variant": "#475569"
               },
               fontFamily: {
                 "headline": ["Space Grotesk"],
@@ -76,10 +50,10 @@
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
     <!-- TopAppBar -->
-    <header class="bg-[#181c22] text-[#00E5FF] font-headline tracking-tight docked full-width top-0 z-50 shadow-[0_4px_20px_rgba(0,229,255,0.1)] fixed w-full">
+    <header class="bg-surface text-primary font-headline tracking-tight docked full-width top-0 z-50 shadow-sm fixed w-full border-b border-outline-variant">
         <div class="flex justify-between items-center w-full px-6 py-4">
             <div class="flex items-center gap-4">
-                <span class="text-xl font-bold uppercase tracking-widest text-[#00E5FF]">Smart Traffic Control System</span>
+                <span class="text-xl font-bold uppercase tracking-widest text-primary">Smart Traffic Control System</span>
                 <span class="h-4 w-[1px] bg-outline-variant opacity-30"></span>
                 <div class="flex items-center gap-2 text-primary">
                     <span class="material-symbols-outlined text-sm">schedule</span>
@@ -88,37 +62,37 @@
             </div>
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high border border-primary-container/20">
-                    <span class="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse"></span>
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                     <span class="text-xs font-bold uppercase tracking-wider">Online</span>
                 </div>
                 <div class="flex gap-4">
-                    <span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-[#1c2026] hover:text-[#c3f5ff] transition-colors p-2 rounded-lg">notifications</span>
-                    <span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-[#1c2026] hover:text-[#c3f5ff] transition-colors p-2 rounded-lg">settings</span>
+                    <span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-surface-container hover:text-primary transition-colors p-2 rounded-lg">notifications</span>
+                    <span class="material-symbols-outlined cursor-pointer active:scale-95 duration-150 hover:bg-surface-container hover:text-primary transition-colors p-2 rounded-lg">settings</span>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- SideNavBar -->
-    <aside class="bg-[#181c22] text-[#00E5FF] font-['Inter'] text-sm uppercase tracking-wider fixed left-0 top-0 h-full flex flex-col pt-20 w-64 shadow-[4px_0_24px_rgba(0,0,0,0.5)] z-40 bg-gradient-to-r from-[#181c22] to-[#1c2026]">
-        <div class="px-6 py-4 border-b border-outline-variant/10 mb-4">
-            <h2 class="font-['Space_Grotesk'] font-black text-white text-lg tracking-tighter">STCS OPS</h2>
+    <aside class="bg-surface text-on-surface font-['Inter'] text-sm uppercase tracking-wider fixed left-0 top-0 h-full flex flex-col pt-20 w-64 shadow-[4px_0_24px_rgba(0,0,0,0.05)] z-40 border-r border-outline-variant">
+        <div class="px-6 py-4 border-b border-outline-variant/50 mb-4">
+            <h2 class="font-['Space_Grotesk'] font-black text-slate-800 text-lg tracking-tighter">STCS OPS</h2>
             <p class="text-[10px] text-slate-500 font-medium">Terminal Alpha-9</p>
         </div>
         <nav class="flex-1 px-2">
-            <a id="overview-link" class="flex items-center gap-3 bg-[#262a31]/10 text-[#00E5FF] border-r-4 border-[#00E5FF] px-4 py-3 my-1 hover:translate-x-1 duration-300 transition-all active" href="#">
+            <a id="overview-link" class="flex items-center gap-3 bg-primary-container text-primary border-r-4 border-primary px-4 py-3 my-1 hover:translate-x-1 duration-300 transition-all active font-semibold" href="#">
                 <span class="material-symbols-outlined">dashboard</span>
                 <span>Dashboard Overview</span>
             </a>
-            <a id="analytics-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+            <a id="analytics-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-primary hover:bg-surface-container-low hover:translate-x-1 duration-300 transition-all font-semibold" href="#">
                 <span class="material-symbols-outlined">leaderboard</span>
                 <span>Analytics Engine</span>
             </a>
-            <a id="history-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+            <a id="history-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-primary hover:bg-surface-container-low hover:translate-x-1 duration-300 transition-all font-semibold" href="#">
                 <span class="material-symbols-outlined">history</span>
                 <span>Intelligence Log</span>
             </a>
-            <a id="security-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-[#c3f5ff] hover:bg-[#1c2026] hover:translate-x-1 duration-300 transition-all" href="#">
+            <a id="security-link" class="flex items-center gap-3 text-slate-500 px-4 py-3 my-1 hover:text-primary hover:bg-surface-container-low hover:translate-x-1 duration-300 transition-all font-semibold" href="#">
                 <span class="material-symbols-outlined">security</span>
                 <span>System Security</span>
             </a>
@@ -157,207 +131,190 @@
     <!-- Main Content Canvas -->
     <main class="ml-64 pt-24 px-8 pb-12">
         <!-- TAB: OVERVIEW -->
-        <div id="overview-tab" class="grid grid-cols-12 gap-8 tab-content animate-in">
-            <!-- Left & Center: Live Feeds & Simulation -->
-            <div class="col-span-12 lg:col-span-8 space-y-8">
+        <div id="overview-tab" class="grid grid-cols-12 gap-6 tab-content animate-in">
+            <!-- TOP SECTION -->
             <!-- A. LIVE TRAFFIC VIEW -->
-            <section class="relative rounded-xl overflow-hidden glass-panel border border-outline-variant/10 group shadow-2xl">
-                <div class="aspect-video relative bg-black">
-                    <img id="liveFeed" class="w-full h-full object-contain" src="" alt="Stream initializing..."/>
-                    
-                    <!-- HUD Overlays -->
-                    <div class="absolute inset-0 pointer-events-none">
-                        <!-- Scanning box -->
-                        <div class="absolute top-1/4 left-1/4 w-32 h-32 border-2 border-primary-container/40 rounded-lg animate-pulse">
-                            <span class="absolute -top-6 left-0 text-[10px] text-primary-container font-mono bg-surface/60 px-1">VEHICLE_SCAN: ACTV</span>
-                        </div>
-                        <div class="scan-line"></div>
-                    </div>
-
-                    <!-- HUD Metadata -->
-                    <div class="absolute top-6 left-6 flex items-center gap-4">
-                        <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-primary-container/30">
-                            <span class="text-primary-container font-headline font-bold tracking-widest text-sm uppercase">CAM-01 | Main Highway</span>
-                        </div>
-                        <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
-                            <span class="text-on-surface font-mono text-xs tracking-tighter" id="hud-timestamp">--:--:--:-- MS</span>
-                        </div>
-                    </div>
-
-                    <!-- HUD Status -->
-                    <div class="absolute bottom-6 right-6 flex flex-col items-end gap-3">
-                        <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
-                            <div class="flex items-center gap-4 text-xs font-mono">
-                                <span class="text-slate-400 uppercase">Density:</span>
-                                <span class="text-primary-container font-bold" id="density-value">--%</span>
+            <div class="col-span-12 xl:col-span-8">
+                <section class="relative rounded-xl overflow-hidden glass-panel border border-outline-variant/30 group shadow-lg h-full bg-white">
+                    <div class="aspect-video relative bg-slate-100 h-full">
+                        <img id="liveFeed" class="w-full h-full object-contain" src="" alt="Stream initializing..."/>
+                        
+                        <!-- HUD Overlays -->
+                        <div class="absolute inset-0 pointer-events-none">
+                            <div class="absolute top-1/4 left-1/4 w-32 h-32 border-2 border-primary-container/40 rounded-lg animate-pulse">
+                                <span class="absolute -top-6 left-0 text-[10px] text-primary-container font-mono bg-surface/60 px-1">VEHICLE_SCAN: ACTV</span>
                             </div>
-                            <div class="flex items-center gap-4 text-xs font-mono mt-1">
-                                <span class="text-slate-400 uppercase">Lanes:</span>
-                                <span class="text-tertiary-fixed-dim font-bold" id="lane-changes-value">0</span>
+                            <div class="scan-line"></div>
+                        </div>
+
+                        <!-- HUD Metadata -->
+                        <div class="absolute top-6 left-6 flex items-center gap-4">
+                            <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-primary-container/30">
+                                <span class="text-primary-container font-headline font-bold tracking-widest text-sm uppercase">CAM-01 | Main Highway</span>
+                            </div>
+                            <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
+                                <span class="text-on-surface font-mono text-xs tracking-tighter" id="hud-timestamp">--:--:--:-- MS</span>
                             </div>
                         </div>
-                        <div class="flex items-center gap-2 bg-error-container/40 backdrop-blur-md px-3 py-1 rounded-full border border-error/30">
-                            <span class="w-2 h-2 bg-error rounded-full animate-pulse"></span>
-                            <span class="text-[10px] font-bold text-error uppercase">Live Intelligence</span>
+
+                        <!-- HUD Status -->
+                        <div class="absolute bottom-6 right-6 flex flex-col items-end gap-3">
+                            <div class="bg-surface-container-lowest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
+                                <div class="flex items-center gap-4 text-xs font-mono">
+                                    <span class="text-slate-400 uppercase">Density:</span>
+                                    <span class="text-primary-container font-bold" id="density-value">--%</span>
+                                </div>
+                                <div class="flex items-center gap-4 text-xs font-mono mt-1">
+                                    <span class="text-slate-400 uppercase">Lanes:</span>
+                                    <span class="text-tertiary-fixed-dim font-bold" id="lane-changes-value">0</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 bg-error-container/40 backdrop-blur-md px-3 py-1 rounded-full border border-error/30">
+                                <span class="w-2 h-2 bg-error rounded-full animate-pulse"></span>
+                                <span class="text-[10px] font-bold text-error uppercase">Live Intelligence</span>
+                            </div>
                         </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Right: Key Stats -->
+            <div class="col-span-12 xl:col-span-4 grid grid-cols-2 gap-4">
+                <div class="col-span-2 glass-panel p-6 rounded-xl border border-outline-variant/10 neon-glow-primary">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">Total Vehicle Count</p>
+                    <div class="flex items-baseline gap-2">
+                        <h2 class="text-5xl font-headline font-black text-primary-container tracking-tighter" id="total-vehicle-count">--</h2>
                     </div>
                 </div>
-            </section>
+                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Congestion</p>
+                    <h3 class="text-2xl font-headline font-bold text-[#4ADE80] uppercase" id="congestion-status">--</h3>
+                </div>
+                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Avg Speed</p>
+                    <h3 class="text-2xl font-headline font-bold text-on-surface" id="avg-speed-value">-- <span class="text-xs text-slate-500">km/h</span></h3>
+                </div>
+                <div class="col-span-2 glass-panel p-4 rounded-xl border border-outline-variant/10">
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Prediction Core</p>
+                    <h3 class="text-sm font-headline font-bold text-on-surface" id="prediction-full-text">Analyzing neural patterns...</h3>
+                </div>
+            </div>
 
-            <!-- B. INTERSECTION SIMULATION & CONTROLS -->
-            <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- MIDDLE SECTION -->
+            <div class="col-span-12 xl:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Simulation Mock -->
                 <div class="glass-panel p-6 rounded-xl border border-outline-variant/10">
                     <div class="flex justify-between items-center mb-6">
-                        <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm">Intersection Simulation</h3>
-                        <span class="material-symbols-outlined text-slate-500 text-sm">filter_center_focus</span>
+                        <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm flex items-center gap-3">
+                            Traffic Control Sim
+                            <span class="bg-surface-container-highest px-2 py-0.5 rounded text-xs font-mono border border-primary/20 text-primary-container" id="sim-timer">-- s</span>
+                        </h3>
+                        <span class="material-symbols-outlined text-slate-500 text-sm" id="sim-icon">filter_center_focus</span>
                     </div>
-                    <div class="relative aspect-square bg-surface-container-lowest rounded-lg border border-outline-variant/5 flex items-center justify-center overflow-hidden">
-                        <div class="absolute w-full h-16 bg-surface-variant/20"></div>
-                        <div class="absolute h-full w-16 bg-surface-variant/20"></div>
-                        <div class="absolute top-[30%] left-1/2 -translate-x-1/2 flex flex-col gap-1">
-                            <div class="w-2 h-2 rounded-full bg-error neon-glow-error" id="sim-light-red"></div>
-                            <div class="w-2 h-2 rounded-full bg-tertiary/20"></div>
-                            <div class="w-2 h-2 rounded-full bg-primary-container/20"></div>
-                        </div>
-                        <div class="absolute top-1/2 left-4 w-4 h-2 bg-primary-container rounded-sm shadow-[0_0_8px_rgba(0,229,255,0.5)]"></div>
-                        <div class="absolute top-[45%] right-8 w-4 h-2 bg-tertiary-fixed-dim rounded-sm"></div>
+                    <div class="intersection-wrapper">
+                        <div class="road-h"></div>
+                        <div class="road-v"></div>
+                        
+                        <!-- Dynamic Lanes for Vehicle Spawning -->
+                        <!-- Horizontal W -> E -->
+                        <div class="lane-queue lane-1-queue" id="lane-1-queue"></div>
+                        <div class="lane-queue lane-2-queue" id="lane-2-queue"></div>
+                        <!-- Horizontal E -> W -->
+                        <div class="lane-queue lane-5-queue" id="lane-5-queue"></div>
+                        <div class="lane-queue lane-6-queue" id="lane-6-queue"></div>
+                        <!-- Vertical N -> S -->
+                        <div class="lane-queue lane-3-queue" id="lane-3-queue"></div>
+                        <div class="lane-queue lane-4-queue" id="lane-4-queue"></div>
+                        <!-- Vertical S -> N -->
+                        <div class="lane-queue lane-7-queue" id="lane-7-queue"></div>
+                        <div class="lane-queue lane-8-queue" id="lane-8-queue"></div>
+                        
+                        <!-- Traffic Lights -->
+                        <!-- Left Group (Horizontal) -->
+                        <div class="sim-light" id="light-left" style="top: calc(50% - 32px); right: calc(50% + 58px);"></div>
+                        <div class="sim-light" id="light-right" style="top: calc(50% + 18px); left: calc(50% + 58px);"></div>
+                        <!-- Top Group (Vertical) -->
+                        <div class="sim-light" id="light-top" style="bottom: calc(50% + 58px); left: calc(50% - 32px);"></div>
+                        <div class="sim-light" id="light-bottom" style="top: calc(50% + 58px); right: calc(50% - 32px);"></div>
                     </div>
                 </div>
                 
                 <!-- Manual Overrides -->
-                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10">
+                <div class="glass-panel p-6 rounded-xl border border-outline-variant/10 flex flex-col justify-center">
                     <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-6">Manual Overrides</h3>
                     <div class="space-y-4">
-                        <button class="w-full py-4 rounded-lg bg-error-container text-on-error-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-error/30">
+                        <button id="btn-force-red" class="w-full py-4 rounded-lg bg-error-container text-on-error-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-error/30">
                             <span class="material-symbols-outlined text-lg">dangerous</span>
                             FORCE RED
                         </button>
-                        <button class="w-full py-4 rounded-lg bg-primary-container text-on-primary-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-primary/30">
+                        <button id="btn-force-green" class="w-full py-4 rounded-lg bg-primary-container text-on-primary-container font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:brightness-125 transition-all active:scale-95 border border-primary/30">
                             <span class="material-symbols-outlined text-lg">bolt</span>
                             FORCE GREEN
                         </button>
-                        <button class="w-full py-4 rounded-lg bg-surface-container-high text-on-surface font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-surface-bright transition-all active:scale-95 border border-outline-variant/20">
+                        <button id="btn-reset-auto" class="w-full py-4 rounded-lg bg-surface-container-high text-on-surface font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-surface-bright transition-all active:scale-95 border border-outline-variant/20">
                             <span class="material-symbols-outlined text-lg">autorenew</span>
                             RESET TO AUTO
                         </button>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- C. ANALYTICS -->
-            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
-                <div class="flex justify-between items-center mb-8">
-                    <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm">Traffic Flow Analytics</h3>
-                    <div class="flex gap-2">
-                        <button class="px-3 py-1 text-[10px] rounded bg-primary-container text-on-primary-container font-bold shadow-lg shadow-primary-container/20">Real-time</button>
+            <!-- Right: Lane Density Bars -->
+            <div class="col-span-12 xl:col-span-4 glass-panel p-6 rounded-xl border border-outline-variant/10">
+                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-6">Lane Distribution</h3>
+                <div class="space-y-4" id="lane-container">
+                    <!-- Lane 1 -->
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <div><h4 class="text-xs font-bold text-slate-700 uppercase">Lane 1 (W &rarr; E)</h4><p class="text-[10px] text-slate-500" id="lane-1-sub">-- Vehicles</p></div>
+                            <span class="text-[10px] font-bold text-primary" id="lane-1-density">--%</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-surface-container-low rounded-full overflow-hidden">
+                            <div class="h-full bg-primary transition-all duration-500" id="lane-1-bar" style="width: 0%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="h-64">
-                    <canvas id="intensityChart"></canvas>
-                </div>
-            </section>
-        </div>
-
-        <!-- Right Side Panel: Metrics & Zones -->
-        <div class="col-span-12 lg:col-span-4 space-y-8">
-            <!-- Metrics Cards -->
-            <div class="grid grid-cols-2 gap-4">
-                <div class="col-span-2 glass-panel p-6 rounded-xl border border-outline-variant/10 neon-glow-primary">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-2">Total Vehicle Count</p>
-                    <div class="flex items-baseline gap-2">
-                        <h2 class="text-4xl font-headline font-black text-primary-container tracking-tighter" id="total-vehicle-count">--</h2>
-                        <span class="text-[10px] text-tertiary-fixed-dim font-mono">+12% vs last hour</span>
+                    <!-- Lane 2 -->
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <div><h4 class="text-xs font-bold text-slate-700 uppercase">Lane 2 (W &rarr; E)</h4><p class="text-[10px] text-slate-500" id="lane-2-sub">-- Vehicles</p></div>
+                            <span class="text-[10px] font-bold text-primary" id="lane-2-density">--%</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-surface-container-low rounded-full overflow-hidden">
+                            <div class="h-full bg-primary transition-all duration-500" id="lane-2-bar" style="width: 0%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Congestion</p>
-                    <h3 class="text-xl font-headline font-bold text-[#4ADE80] uppercase" id="congestion-status">--</h3>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Avg Speed</p>
-                    <h3 class="text-xl font-headline font-bold text-on-surface" id="avg-speed-value">-- <span class="text-xs text-slate-500">km/h</span></h3>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Predicted</p>
-                    <div class="flex items-center gap-2">
-                        <h3 class="text-xl font-headline font-bold text-on-surface" id="predicted-count">--</h3>
-                        <span class="text-lg font-bold text-primary-container" id="prediction-trend">→</span>
+                    <!-- Lane 3 -->
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <div><h4 class="text-xs font-bold text-slate-700 uppercase">Lane 3 (N &rarr; S)</h4><p class="text-[10px] text-slate-500" id="lane-3-sub">-- Vehicles</p></div>
+                            <span class="text-[10px] font-bold text-tertiary-fixed-dim" id="lane-3-density">--%</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-surface-container-low rounded-full overflow-hidden">
+                            <div class="h-full bg-tertiary-fixed-dim transition-all duration-500" id="lane-3-bar" style="width: 0%"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="glass-panel p-4 rounded-xl border border-outline-variant/10">
-                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Status</p>
-                    <h3 class="text-xs font-headline font-bold text-primary-container uppercase tracking-widest mt-2" id="prediction-status">OPTIMIZED</h3>
+                    <!-- Lane 4 -->
+                    <div>
+                        <div class="flex justify-between items-end mb-2">
+                            <div><h4 class="text-xs font-bold text-slate-700 uppercase">Lane 4 (N &rarr; S)</h4><p class="text-[10px] text-slate-500" id="lane-4-sub">-- Vehicles</p></div>
+                            <span class="text-[10px] font-bold text-tertiary-fixed-dim" id="lane-4-density">--%</span>
+                        </div>
+                        <div class="h-1.5 w-full bg-surface-container-low rounded-full overflow-hidden">
+                            <div class="h-full bg-tertiary-fixed-dim transition-all duration-500" id="lane-4-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Multi-Zone Grid -->
-            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
-                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-6">Zone Health</h3>
-                <div class="space-y-6" id="zone-container">
-                    <!-- Zone 1 -->
-                    <div>
-                        <div class="flex justify-between items-end mb-2">
-                            <div>
-                                <h4 class="text-xs font-bold text-white uppercase">Sector Alpha</h4>
-                                <p class="text-[10px] text-slate-500" id="zone-1-sub">-- Vehicles</p>
-                            </div>
-                            <span class="text-[10px] font-bold text-[#4ADE80]" id="zone-1-status">NORMAL</span>
-                        </div>
-                        <div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-                            <div class="h-full bg-primary-container transition-all duration-500" id="zone-1-bar" style="width: 35%"></div>
-                        </div>
-                    </div>
-                    <!-- Zone 2 -->
-                    <div>
-                        <div class="flex justify-between items-end mb-2">
-                            <div>
-                                <h4 class="text-xs font-bold text-white uppercase">Sector Beta</h4>
-                                <p class="text-[10px] text-slate-500" id="zone-2-sub">-- Vehicles</p>
-                            </div>
-                            <span class="text-[10px] font-bold text-tertiary-fixed-dim" id="zone-2-status">MODERATE</span>
-                        </div>
-                        <div class="h-1.5 w-full bg-surface-container-lowest rounded-full overflow-hidden">
-                            <div class="h-full bg-tertiary-fixed-dim transition-all duration-500" id="zone-2-bar" style="width: 65%"></div>
-                        </div>
-                    </div>
+            <!-- BOTTOM SECTION -->
+            <div class="col-span-12 glass-panel p-6 rounded-xl border border-outline-variant/10">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm">Traffic Flow Analytics</h3>
                 </div>
-            </section>
-
-            <!-- AI Insights Panel -->
-            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10">
-                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-4 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-sm">psychology</span>
-                    AI Insights Model
-                </h3>
-                <div id="ai-insights-container" class="space-y-3 max-h-[150px] overflow-y-auto custom-scrollbar pr-2">
-                    <!-- Dynamic insights will be injected here by app.js -->
-                    <div class="flex items-start gap-2 text-xs font-mono text-slate-500">
-                        <span class="text-slate-600 font-bold">></span>
-                        <span class="animate-pulse">Awaiting neural telemetry...</span>
-                    </div>
+                <div class="h-48">
+                    <canvas id="intensityChart"></canvas>
                 </div>
-            </section>
-
-            <!-- Event History Log -->
-            <section class="glass-panel p-6 rounded-xl border border-outline-variant/10 h-[300px] flex flex-col">
-                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-sm mb-4">Intelligence Log</h3>
-                <div class="flex-1 overflow-y-auto custom-scrollbar pr-2">
-                    <table class="w-full text-left text-[10px] text-slate-400 font-mono">
-                        <thead class="sticky top-0 bg-surface-container py-2 border-b border-outline-variant/10">
-                            <tr>
-                                <th class="pb-2">LOG_TIME</th>
-                                <th class="pb-2">CNT</th>
-                                <th class="pb-2">SPD</th>
-                                <th class="pb-2">STAT</th>
-                            </tr>
-                        </thead>
-                        <tbody id="history-table-body">
-                            <!-- Rows populated by app.js -->
-                        </tbody>
-                    </table>
-                </div>
-            </section>
+            </div>
         </div>
 
         <!-- TAB: ANALYTICS (Full Width) -->
@@ -370,6 +327,21 @@
                     <div class="bg-surface-container-lowest/50 rounded-xl p-6 h-full">
                         <!-- We use the same chart but can add more later -->
                         <canvas id="deepAnalyticsChart"></canvas> 
+                    </div>
+                </div>
+            </div>
+            
+            <!-- AI Insights Panel -->
+            <div class="glass-panel p-8 rounded-xl border border-outline-variant/10">
+                <h3 class="font-headline font-bold text-primary uppercase tracking-wider text-lg mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-xl">psychology</span>
+                    AI Insights Model
+                </h3>
+                <div id="ai-insights-container" class="space-y-4 max-h-[300px] overflow-y-auto custom-scrollbar pr-2 bg-surface-container-lowest/50 rounded-xl p-6">
+                    <!-- Dynamic insights will be injected here by app.js -->
+                    <div class="flex items-start gap-2 text-sm font-mono text-slate-500">
+                        <span class="text-slate-600 font-bold">></span>
+                        <span class="animate-pulse">Awaiting neural telemetry...</span>
                     </div>
                 </div>
             </div>
@@ -390,12 +362,49 @@
                                 <th class="p-4">OBJECTS</th>
                                 <th class="p-4">AVG_SPEED</th>
                                 <th class="p-4">CONGESTION</th>
+                                <th class="p-4">TREND</th>
                             </tr>
                         </thead>
                         <tbody id="history-table-body-full" class="divide-y divide-outline-variant/5">
                             <!-- Populated via JS -->
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: SECURITY (Full Width) -->
+        <div id="security-tab" class="tab-content hidden animate-in space-y-8">
+            <div class="glass-panel p-8 rounded-xl border border-outline-variant/10">
+                <h3 class="font-headline font-bold text-error uppercase tracking-wider text-lg mb-8">System Security & Health</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Status Card 1 -->
+                    <div class="bg-surface-container-lowest/50 rounded-xl p-6 border border-outline-variant/5">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="material-symbols-outlined text-3xl text-primary">videocam</span>
+                            <span class="px-2 py-1 bg-primary-container text-on-primary-container text-xs font-bold rounded">ONLINE</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Camera Status</h4>
+                        <p class="text-xs text-slate-500 mt-2 font-mono" id="sec-cam-status">All feeds active and encrypted.</p>
+                    </div>
+                    <!-- Status Card 2 -->
+                    <div class="bg-surface-container-lowest/50 rounded-xl p-6 border border-outline-variant/5">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="material-symbols-outlined text-3xl text-error">warning</span>
+                            <span class="px-2 py-1 bg-surface-container-high text-slate-600 text-xs font-bold rounded" id="sec-alert-badge">NO ALERTS</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Active Alerts</h4>
+                        <p class="text-xs text-slate-500 mt-2 font-mono" id="sec-alert-msg">System operating within normal parameters.</p>
+                    </div>
+                    <!-- Status Card 3 -->
+                    <div class="bg-surface-container-lowest/50 rounded-xl p-6 border border-outline-variant/5">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="material-symbols-outlined text-3xl text-tertiary-fixed-dim">memory</span>
+                            <span class="px-2 py-1 bg-tertiary-fixed-dim text-on-tertiary-fixed text-xs font-bold rounded">STABLE</span>
+                        </div>
+                        <h4 class="text-sm font-bold text-slate-700 uppercase tracking-wider">Neural Engine</h4>
+                        <p class="text-xs text-slate-500 mt-2 font-mono" id="sec-engine-status">Inference loop healthy. Latency nominal.</p>
+                    </div>
                 </div>
             </div>
         </div>

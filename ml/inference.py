@@ -7,6 +7,7 @@ import json
 import time
 from datetime import datetime
 import numpy as np
+import torch
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -16,6 +17,9 @@ from ml import tracking, speed, lane, prediction, performance, metrics
 # Initialize models and monitors
 try:
     model = YOLO(config.YOLO_MODEL_PATH)
+    print(f"YOLO loaded: {config.YOLO_MODEL_PATH} on {config.DEVICE}")
+    if config.DEVICE == "cuda":
+        print(f"CUDA status: {torch.cuda.get_device_name(0)}")
 except Exception as e:
     print(f"Warning: Could not load YOLO model: {e}")
     model = None
@@ -29,6 +33,14 @@ VEHICLE_CLASSES = [2, 3, 5, 7]
 
 # For prediction history
 count_history = []
+frame_counter = 0
+dynamic_boundaries = None
+
+# Adaptive Traffic Signal State
+current_signal_state = "LEFT_GREEN"
+signal_timer = 5.0
+signal_lock_timer = 0.0
+last_signal_update_time = time.time()
 
 def estimate_congestion(count: int) -> str:
     if count < config.CONGESTION_THRESHOLDS["LOW"]:
@@ -49,10 +61,12 @@ def safe_replace(temp_path, final_path, max_retries=3):
     return False
 
 def process_frame(frame) -> dict:
+    global frame_counter, dynamic_boundaries, current_signal_state, signal_timer, signal_lock_timer, last_signal_update_time
     if model is None:
         raise RuntimeError("YOLO model not loaded")
     
     perf.start_frame()
+    frame_counter += 1
     
     # Run YOLO tracking with hardware acceleration and optimized resolution
     results = model.track(
@@ -65,10 +79,24 @@ def process_frame(frame) -> dict:
         half=True
     )
     
+    avg_conf = 0.0
+    det_count = 0
+    if len(results) > 0 and results[0].boxes is not None and results[0].boxes.conf is not None:
+        confs = results[0].boxes.conf.cpu().numpy()
+        if len(confs) > 0:
+            avg_conf = float(round(np.mean(confs) * 100, 2))
+            det_count = len(confs)
+            
+    # Phase 1 & 2: Dynamic Lane Detection Cache & Fallback
+    if frame_counter % 30 == 0 or dynamic_boundaries is None or avg_conf < 40.0:
+        new_bounds = lane.detect_lanes(frame)
+        if new_bounds is not None and len(new_bounds) >= 3:
+            dynamic_boundaries = new_bounds
+            
     current_ids = []
     total_lane_changes = 0
     
-    if len(results) > 0 and results[0].boxes.id is not None:
+    if len(results) > 0 and results[0].boxes is not None and results[0].boxes.id is not None:
         boxes = results[0].boxes
         ids = boxes.id.cpu().numpy().astype(int)
         coords = boxes.xywh.cpu().numpy() # centroid x, y, w, h
@@ -78,7 +106,7 @@ def process_frame(frame) -> dict:
             centroid = (box[0], box[1])
             
             # 1. Update Lane
-            v_lane = lane.assign_lane(centroid)
+            v_lane = lane.assign_lane(centroid, dynamic_boundaries)
             
             # 2. Update Tracker
             tracker.update(vid, centroid, v_lane)
@@ -129,15 +157,59 @@ def process_frame(frame) -> dict:
     pred_congestion = prediction.predict_congestion(pred_count)
     trend = prediction.analyze_trend(count_history)
     
-    perf.end_frame()
+    # Phase 2: Advanced Adaptive Traffic Signal Logic
+    left_count = lane_counts[1] + lane_counts[2]
+    right_count = lane_counts[3] + lane_counts[4]
+    total_count = left_count + right_count
     
-    avg_conf = 0.0
-    det_count = 0
-    if len(results) > 0 and results[0].boxes.conf is not None:
-        confs = results[0].boxes.conf.cpu().numpy()
-        if len(confs) > 0:
-            avg_conf = float(round(np.mean(confs) * 100, 2))
-            det_count = len(confs)
+    left_congestion = estimate_congestion(left_count)
+    right_congestion = estimate_congestion(right_count)
+    
+    # Timer calculations
+    now_time = time.time()
+    dt = now_time - last_signal_update_time
+    last_signal_update_time = now_time
+    
+    signal_timer -= dt
+    if signal_lock_timer > 0:
+        signal_lock_timer -= dt
+    
+    # Preemption Logic: Reduce time if waiting lane is highly congested
+    # "Lock" subsequent signal by ensuring signal_lock_timer > 0 preventing flicker
+    if signal_lock_timer <= 0:
+        if current_signal_state == "LEFT_GREEN":
+            if (right_congestion == "HIGH" or lane_stats["3"]["density"] > 75 or lane_stats["4"]["density"] > 75) and left_congestion != "HIGH" and signal_timer > 2.0:
+                signal_timer = 2.0
+        elif current_signal_state == "RIGHT_GREEN":
+            if (left_congestion == "HIGH" or lane_stats["1"]["density"] > 75 or lane_stats["2"]["density"] > 75) and right_congestion != "HIGH" and signal_timer > 2.0:
+                signal_timer = 2.0
+    
+    if signal_timer <= 0:
+        # Switch signal
+        signal_lock_timer = 5.0 # Lock the new signal for at least 5 seconds
+        if current_signal_state == "LEFT_GREEN":
+            current_signal_state = "RIGHT_GREEN"
+            if right_congestion == "HIGH" or right_count > left_count * 2:
+                signal_timer = 15.0
+            else:
+                ratio = right_count / total_count if total_count > 0 else 0.5
+                signal_timer = 5.0 + (ratio * 10.0)
+        else:
+            current_signal_state = "LEFT_GREEN"
+            if left_congestion == "HIGH" or left_count > right_count * 2:
+                signal_timer = 15.0
+            else:
+                ratio = left_count / total_count if total_count > 0 else 0.5
+                signal_timer = 5.0 + (ratio * 10.0)
+            
+    active_signal = current_signal_state
+    remaining_time = round(max(0, signal_timer), 1)
+    
+    # Override AUTO logic
+    if total_count == 0:
+        active_signal = "AUTO"
+        
+    perf.end_frame()
             
     insights = []
     if trend == "↑": insights.append("Traffic volume increasing ↑")
@@ -169,6 +241,9 @@ def process_frame(frame) -> dict:
         "detection_count": det_count,
         "insights": insights,
         "lane_stats": lane_stats,
+        "active_signal": active_signal,
+        "remaining_time": remaining_time,
+        "active_direction": active_signal.replace("_GREEN", ""),
         "timestamp": datetime.now().isoformat()
     }
 
@@ -187,14 +262,14 @@ def process_frame(frame) -> dict:
         
         # Draw Perspective Lane boundaries (Internal separators 1, 2, 3)
         for i in range(1, 4):
-            x_top = int(lane.get_lane_boundary_x(config.LANE_TOP_Y, i))
-            x_bottom = int(lane.get_lane_boundary_x(config.LANE_BOTTOM_Y, i))
+            x_top = int(lane.get_lane_boundary_x(config.LANE_TOP_Y, i, dynamic_boundaries))
+            x_bottom = int(lane.get_lane_boundary_x(config.LANE_BOTTOM_Y, i, dynamic_boundaries))
             cv2.line(annotated_frame, (x_top, config.LANE_TOP_Y), (x_bottom, config.LANE_BOTTOM_Y), (150, 150, 150), 2)
             cv2.putText(annotated_frame, f"L {i}", (x_bottom - 50, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
         cv2.putText(annotated_frame, "L 4", (width - 100, height - 20), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 1)
                 
         # Draw vehicle boxes and trails
-        if len(results) > 0 and results[0].boxes.id is not None:
+        if len(results) > 0 and results[0].boxes is not None and results[0].boxes.id is not None:
             ids_draw = results[0].boxes.id.cpu().numpy().astype(int)
             xyxy = results[0].boxes.xyxy.cpu().numpy()
             
@@ -207,18 +282,9 @@ def process_frame(frame) -> dict:
 
             for d_vid, box_xyxy in zip(ids_draw, xyxy):
                 x1, y1, x2, y2 = map(int, box_xyxy)
-                hist = tracker.get_history(d_vid)
                 
-                # Trail physics (Smoothed & Truncated)
-                if hist and 'centroids' in hist and len(hist['centroids']) > 1:
-                    # Truncate to last 15 points to improve clarity
-                    trail_pts = hist['centroids'][-15:]
-                    pts = np.array(trail_pts, np.int32).reshape((-1, 1, 2))
-                    cv2.polylines(annotated_frame, [pts], isClosed=False, color=(0, 229, 255), thickness=2)
-                
-                # Glow & HUD Labels
-                cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), (0, 229, 255), 3) # Glow
-                cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), (255, 255, 255), 1) # Core
+                # Optimized Core Drawing (High Performance)
+                cv2.rectangle(annotated_frame, (x1, y1), (x2, y2), (14, 165, 233), 2)
                 
                 spd = 0.0
                 if hist and 'speeds' in hist and len(hist['speeds']) > 0:

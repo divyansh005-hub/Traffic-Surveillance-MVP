@@ -117,15 +117,33 @@ def get_tracking():
 
 @app.get("/results/history")
 def get_history(limit: int = 20, db: Session = Depends(database.get_db)):
-    results = db.query(database.TrafficResult).order_by(desc(database.TrafficResult.timestamp)).limit(limit).all()
-    return [{
-        "timestamp": r.timestamp.isoformat() + "Z",
-        "vehicle_count": r.vehicle_count,
-        "congestion_level": r.congestion_level,
-        "avg_speed": r.avg_speed,
-        "flow_rate": r.flow_rate,
-        "density": r.density
-    } for r in results]
+    results = db.query(database.TrafficResult).order_by(desc(database.TrafficResult.timestamp)).limit(limit + 1).all()
+    
+    history_out = []
+    for i in range(len(results)):
+        if i == len(results) - 1 and len(results) > limit:
+            break
+            
+        r = results[i]
+        trend = "→"
+        if i + 1 < len(results):
+            prev_r = results[i + 1]
+            diff = r.vehicle_count - prev_r.vehicle_count
+            if diff >= 3:
+                trend = "↑"
+            elif diff <= -3:
+                trend = "↓"
+                
+        history_out.append({
+            "timestamp": r.timestamp.isoformat() + "Z",
+            "vehicle_count": r.vehicle_count,
+            "congestion_level": r.congestion_level,
+            "avg_speed": r.avg_speed,
+            "flow_rate": r.flow_rate,
+            "density": r.density,
+            "trend": trend
+        })
+    return history_out
 
 @app.post("/analyze/image")
 async def analyze_image(file: UploadFile = File(...), db: Session = Depends(database.get_db)):

@@ -6,9 +6,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary-glow: rgba(0, 229, 255, 0.3);
-    --error-glow: rgba(255, 180, 171, 0.3);
-    --tertiary-glow: rgba(250, 189, 0, 0.3);
+    --primary-glow: rgba(14, 165, 233, 0.2);
+    --error-glow: rgba(239, 68, 68, 0.2);
+    --tertiary-glow: rgba(245, 158, 11, 0.2);
+}
+
+body {
+    background-color: #f8fafc;
+    color: #0f172a;
 }
 
 .material-symbols-outlined {
@@ -19,22 +24,22 @@
 
 /* Glassmorphism Panels */
 .glass-panel {
-    background: rgba(28, 32, 38, 0.6);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 }
 
 /* Neon Glow Effects */
 .neon-glow-primary {
-    box-shadow: 0 0 15px var(--primary-glow);
+    box-shadow: 0 4px 20px var(--primary-glow);
 }
 
 .neon-glow-error {
-    box-shadow: 0 0 15px var(--error-glow);
+    box-shadow: 0 4px 20px var(--error-glow);
 }
 
 .neon-glow-tertiary {
-    box-shadow: 0 0 15px var(--tertiary-glow);
+    box-shadow: 0 4px 20px var(--tertiary-glow);
 }
 
 /* Custom Scrollbar */
@@ -43,16 +48,16 @@
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-    background: rgba(28, 32, 38, 0.4);
+    background: rgba(241, 245, 249, 0.8);
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #3b494c;
+    background: #cbd5e1;
     border-radius: 10px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #00daf3;
+    background: #0ea5e9;
 }
 
 /* Animations */
@@ -78,8 +83,8 @@
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(90deg, transparent, #00daf3, transparent);
-    box-shadow: 0 0 15px #00daf3;
+    background: linear-gradient(90deg, transparent, #0ea5e9, transparent);
+    box-shadow: 0 0 15px #0ea5e9;
     animation: scanning 4s linear infinite;
     pointer-events: none;
     z-index: 10;
@@ -87,14 +92,14 @@
 
 /* Active Navigation Styling */
 nav a.active {
-    background: rgba(0, 229, 255, 0.08) !important;
-    color: #00e5ff !important;
-    border-right: 4px solid #00e5ff;
-    box-shadow: inset -10px 0 20px rgba(0, 229, 255, 0.03);
+    background: rgba(14, 165, 233, 0.08) !important;
+    color: #0ea5e9 !important;
+    border-right: 4px solid #0ea5e9;
+    box-shadow: inset -10px 0 20px rgba(14, 165, 233, 0.03);
 }
 
 nav a.active span {
-    color: #00e5ff;
+    color: #0ea5e9;
 }
 
 /* Tab Transition */
@@ -107,3 +112,202 @@ nav a.active span {
     opacity: 0;
     transform: translateY(10px);
 }
+
+/* Intersection Simulation */
+.intersection-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    background: #f8fafc;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.road-h {
+    position: absolute;
+    width: 100%;
+    height: 100px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #e2e8f0;
+    border-top: 2px dashed rgba(0,0,0,0.1);
+    border-bottom: 2px dashed rgba(0,0,0,0.1);
+}
+
+.road-v {
+    position: absolute;
+    height: 100%;
+    width: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #e2e8f0;
+    border-left: 2px dashed rgba(0,0,0,0.1);
+    border-right: 2px dashed rgba(0,0,0,0.1);
+}
+
+/* Median Lines */
+.road-h::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background: #cbd5e1;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.road-v::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    background: #cbd5e1;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Vehicles */
+.sim-vehicle {
+    position: absolute;
+    background: #0ea5e9;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(14, 165, 233, 0.3);
+}
+
+/* Lights */
+.sim-light {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    z-index: 20;
+}
+
+.sim-light.red {
+    background: #ef4444;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.sim-light.green {
+    background: #22c55e;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+}
+
+/* Vehicle Queues */
+.lane-queue {
+    position: absolute;
+    display: flex;
+    gap: 4px;
+}
+
+/* Horizontal: W -> E */
+.lane-1-queue {
+    top: calc(50% + 5px);
+    right: 50%; 
+    width: 50%;
+    height: 14px;
+    flex-direction: row-reverse;
+    align-items: center;
+    padding-right: 60px;
+}
+.lane-2-queue {
+    top: calc(50% + 25px);
+    right: 50%; 
+    width: 50%;
+    height: 14px;
+    flex-direction: row-reverse;
+    align-items: center;
+    padding-right: 60px;
+}
+
+/* Horizontal: E -> W */
+.lane-5-queue {
+    top: calc(50% - 19px);
+    left: 50%; 
+    width: 50%;
+    height: 14px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 60px;
+}
+.lane-6-queue {
+    top: calc(50% - 39px);
+    left: 50%; 
+    width: 50%;
+    height: 14px;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 60px;
+}
+
+/* Vertical: N -> S */
+.lane-3-queue {
+    left: calc(50% - 19px);
+    bottom: 50%;
+    height: 50%;
+    width: 14px;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding-bottom: 60px;
+}
+.lane-4-queue {
+    left: calc(50% - 39px);
+    bottom: 50%;
+    height: 50%;
+    width: 14px;
+    flex-direction: column-reverse;
+    align-items: center;
+    padding-bottom: 60px;
+}
+
+/* Vertical: S -> N */
+.lane-7-queue {
+    left: calc(50% + 5px);
+    top: 50%;
+    height: 50%;
+    width: 14px;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+}
+.lane-8-queue {
+    left: calc(50% + 25px);
+    top: 50%;
+    height: 50%;
+    width: 14px;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+}
+
+
+.real-vehicle-h {
+    width: 12px;
+    height: 8px;
+    background: #f43f5e;
+    border-radius: 2px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(244, 63, 94, 0.4);
+    transition: transform 0.8s ease-in, opacity 0.8s ease-in;
+    z-index: 10;
+}
+
+.real-vehicle-v {
+    width: 8px;
+    height: 12px;
+    background: #0ea5e9;
+    border-radius: 2px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(14, 165, 233, 0.4);
+    transition: transform 0.8s ease-in, opacity 0.8s ease-in;
+    z-index: 10;
+}
+
+.moving-h-right { transform: translateX(180px); opacity: 0; }
+.moving-h-left { transform: translateX(-180px); opacity: 0; }
+.moving-v-down { transform: translateY(180px); opacity: 0; }
+.moving-v-up { transform: translateY(-180px); opacity: 0; }
+
