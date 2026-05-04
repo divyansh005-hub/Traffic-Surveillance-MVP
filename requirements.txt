@@ -3,6 +3,9 @@ uvicorn
 sqlalchemy
 pydantic
 ultralytics
-opencv-python-headless
+opencv-python
+torch
+numpy
 python-multipart
 python-dotenv
+requests

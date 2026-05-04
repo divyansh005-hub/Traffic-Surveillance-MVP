@@ -3,10 +3,10 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_DIR = BASE_DIR / "data"
-DB_PATH = BASE_DIR / "traffic_data.db"
+DB_PATH = DATA_DIR / "traffic_data.db"
 
 # Model configuration
-YOLO_MODEL_PATH = os.getenv("YOLO_MODEL_PATH", "yolo11n.pt")
+YOLO_MODEL_PATH = os.getenv("YOLO_MODEL_PATH", str(BASE_DIR / "models" / "yolo11n.pt"))
 
 CONGESTION_THRESHOLDS = {
     "LOW": 8,
